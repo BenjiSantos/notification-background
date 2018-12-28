@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">Bomberos Perú</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="new_message_notification_title_template">Nueva incidencia: %1$s</string>
+
+    <!-- TODO: remove this placeholder text -->
+    <string name="new_message_notification_placeholder_text_template">Tenemos una en
+        AV. PARQUE DE LAS LEYENDAS - 400 - SAN MIGUEL, VEHICULOS AMB-36 - AMBULANCIA -
+        09:54:07 a.m
+    </string>
+
+    <string name="action_share">Share</string>
+    <string name="action_reply">Reply</string>
+</resources>
