@@ -14,6 +14,8 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -27,6 +29,7 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import supervision.qw.gob.pe.testing.adapter.EmergenciesAdapter;
 import supervision.qw.gob.pe.testing.api.FirefighterService;
 import supervision.qw.gob.pe.testing.api.RetrofitClient;
 import supervision.qw.gob.pe.testing.api.model.Emergencie;
@@ -36,7 +39,7 @@ public class Bottom_navigation extends AppCompatActivity
 
     private TextView mTextMessage;
     private FirefighterService EmergenciesService;
-
+    private RecyclerView mEmergencies;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -83,6 +86,8 @@ public class Bottom_navigation extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         EmergenciesService = RetrofitClient.getRetrofit().create(FirefighterService.class);
+        mEmergencies = (RecyclerView) findViewById(R.id.emergenciesRecyclerView);
+
         syncEmergencies();
         scheduleJob();
     }
@@ -154,11 +159,18 @@ public class Bottom_navigation extends AppCompatActivity
 
                 }
                 else {
+                    // Initialize contacts
+                    // Create adapter passing in the sample user data
+                    EmergenciesAdapter adapter = new EmergenciesAdapter(response.body());
+                    // Attach the adapter to the recyclerview to populate items
+                    mEmergencies.setAdapter(adapter);
+                    // Set layout manager to position the items
+                    mEmergencies.setLayoutManager(new LinearLayoutManager(Bottom_navigation.this));
+
                     SharedPreferences sharedPref = getSharedPreferences("EmergenciesShared", MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPref.edit();
                     editor.putString("NumeroParte", response.body().get(0).getNumeroParte());
                     editor.commit();
-                    Toast.makeText(Bottom_navigation.this,  response.body().get(0).getNumeroParte(), Toast.LENGTH_LONG).show();
                 }
             }
 
