@@ -44,14 +44,16 @@ public class Bottom_navigation extends AppCompatActivity
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-                    mTextMessage.setText(R.string.title_home);
-                    Log.d("TAG", "MENSAJEEWRWERWER");
+                    //mTextMessage.setText(R.string.title_home);
+                    Log.d("TAG", "MENU 1");
                     return true;
                 case R.id.navigation_dashboard:
-                    mTextMessage.setText(R.string.title_dashboard);
+                    //mTextMessage.setText(R.string.title_dashboard);
+                    Log.d("TAG", "MENU 2");
                     return true;
                 case R.id.navigation_notifications:
-                    mTextMessage.setText(R.string.title_notifications);
+                    //mTextMessage.setText(R.string.title_notifications);
+                    Log.d("TAG", "MENU 3");
                     return true;
             }
             return false;
@@ -64,9 +66,8 @@ public class Bottom_navigation extends AppCompatActivity
         setContentView(R.layout.activity_bottom_navigation);
 
         mTextMessage = (TextView) findViewById(R.id.message);
-        //@TODO Instance for bottom navigation functionality
-        //BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
-        //navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
