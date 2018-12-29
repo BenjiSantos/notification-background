@@ -10,6 +10,7 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -33,9 +34,10 @@ import supervision.qw.gob.pe.testing.adapter.EmergenciesAdapter;
 import supervision.qw.gob.pe.testing.api.FirefighterService;
 import supervision.qw.gob.pe.testing.api.RetrofitClient;
 import supervision.qw.gob.pe.testing.api.model.Emergencie;
+import supervision.qw.gob.pe.testing.listeners.OnTabNavListener;
 
 public class Bottom_navigation extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, OnTabNavListener {
 
     private TextView mTextMessage;
     private FirefighterService EmergenciesService;
@@ -53,6 +55,7 @@ public class Bottom_navigation extends AppCompatActivity
                 case R.id.navigation_dashboard:
                     //mTextMessage.setText(R.string.title_dashboard);
                     Log.d("TAG", "MENU 2");
+                    switchToFragment1();
                     return true;
                 case R.id.navigation_notifications:
                     //mTextMessage.setText(R.string.title_notifications);
@@ -62,6 +65,11 @@ public class Bottom_navigation extends AppCompatActivity
             return false;
         }
     };
+
+    public void switchToFragment1() {
+        FragmentManager manager = getSupportFragmentManager();
+        manager.beginTransaction().replace(R.id.drawer_layout, new RadioFragment()).commit();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -166,11 +174,11 @@ public class Bottom_navigation extends AppCompatActivity
                     mEmergencies.setAdapter(adapter);
                     // Set layout manager to position the items
                     mEmergencies.setLayoutManager(new LinearLayoutManager(Bottom_navigation.this));
-
                     SharedPreferences sharedPref = getSharedPreferences("EmergenciesShared", MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPref.edit();
                     editor.putString("NumeroParte", response.body().get(0).getNumeroParte());
                     editor.commit();
+                    Toast.makeText(Bottom_navigation.this,  response.body().get(0).getNumeroParte(), Toast.LENGTH_LONG).show();
                 }
             }
 
