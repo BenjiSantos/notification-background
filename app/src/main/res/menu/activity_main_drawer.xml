@@ -9,6 +9,7 @@
             android:id="@+id/app_bar_switch"
             android:title="Notificaciones"
             android:icon="@drawable/ic_stat_new_message"
+            app:actionLayout="@layout/switch_item"
             app:showAsAction="always" />
     </group>
 
