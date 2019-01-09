@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+tools:context=".CreditFragment"
+android:orientation="vertical">
+
+<!-- TODO: Update blank fragment layout -->
+<TextView
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
+    android:background="@color/colorPrimary"
+    android:text="CRÉDITOS"
+    android:gravity="center"
+    android:textFontWeight="bold"
+    android:textSize="25dp"
+    android:textColor="@color/colorWhite"
+    android:layout_marginTop="56dp"
+    android:id="@+id/title_credit"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorWhite"
+        android:text="Agracemos a Dios"
+        android:textFontWeight="bold"
+        android:textSize="15dp"
+        android:id="@+id/content_credit"
+        android:textColor="@color/colorGrey"
+        android:gravity="center"
+        android:layout_marginBottom="56dp"/>
+</LinearLayout>

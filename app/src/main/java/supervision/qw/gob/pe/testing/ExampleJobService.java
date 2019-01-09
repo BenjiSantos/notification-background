@@ -26,7 +26,7 @@ public class ExampleJobService extends JobService {
     private static final String CHANNEL_ID = "default";
     private static final String CHANNEL_DESCRIPTION = "Your description...";
     private boolean jobCancelled = false;
-    private Emergencie listEmergergencies;
+    private String listEmergergencies;
 
     @Override
     public boolean onStartJob(JobParameters params) {
@@ -47,10 +47,10 @@ public class ExampleJobService extends JobService {
     }
 
     private void syncEmergencies() {
-        Call<List<Emergencie>> loginCall = EmergenciesService.getEmergencies();
-        loginCall.enqueue(new Callback<List<Emergencie>>() {
+        Call<Emergencie> loginCall = EmergenciesService.getEmergencies();
+        loginCall.enqueue(new Callback<Emergencie>() {
             @Override
-            public void onResponse(Call<List<Emergencie>> call, Response<List<Emergencie>> response) {
+            public void onResponse(Call<Emergencie> call, Response<Emergencie> response) {
 
                 if (!response.isSuccessful()) {
                     //Toast.makeText(MainActivity.this, "No se sincronizaron emergencias: 1", Toast.LENGTH_LONG).show();
@@ -65,12 +65,15 @@ public class ExampleJobService extends JobService {
 
                 }
                 else {
-                    listEmergergencies = response.body().get(0);
+                    SharedPreferences sharedPref = getSharedPreferences("EmergenciesShared", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    editor.putString("lastPartNumberEmergencie", response.body().getEmergenciesTotal().get(0).getNumeroParte());
+                    editor.commit();
                 }
             }
 
             @Override
-            public void onFailure(Call<List<Emergencie>> call, Throwable t) {
+            public void onFailure(Call<Emergencie> call, Throwable t) {
                 //Toast.makeText(MainActivity.this, "No se sincronizaron emergencias: " + " (" + t.getMessage() + ")", Toast.LENGTH_LONG).show();
             }
         });
@@ -90,13 +93,15 @@ public class ExampleJobService extends JobService {
             public void run() {
                 syncEmergencies();
                 SharedPreferences preferences = getSharedPreferences("EmergenciesShared", MODE_PRIVATE);
-                String numeroParte =  preferences.getString("NumeroParte", "-");
-                Log.d("numerodeparte",  numeroParte);
+                String PartNumber =  preferences.getString("NumeroParte", "-");
+                String lastPartNumber = preferences.getString("lastPartNumberEmergencie", "--");
 
-                //@TODO compare with true value of REST service
-                if(numeroParte.compareTo("2018064312") != 0) {
+                Log.d("numerodeparte",  PartNumber);
+                Log.d("lastEmergencie",  lastPartNumber);
+
+                if(PartNumber.compareTo(lastPartNumber) != 0) {
                     //@TODO define all text for notification
-                    message.notify(getApplicationContext(), "" + numeroParte, 1, CHANNEL_ID );
+                    message.notify(getApplicationContext(), "" + PartNumber, 1, CHANNEL_ID );
                 }
 
                 if (jobCancelled) {

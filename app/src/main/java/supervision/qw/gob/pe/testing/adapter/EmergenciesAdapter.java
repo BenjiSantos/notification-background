@@ -1,7 +1,11 @@
 package supervision.qw.gob.pe.testing.adapter;
 
+import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,15 +13,23 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import supervision.qw.gob.pe.testing.Bottom_navigation;
 import supervision.qw.gob.pe.testing.R;
 import supervision.qw.gob.pe.testing.api.model.Emergencie;
+import supervision.qw.gob.pe.testing.api.model.EmergencieObject;
 
 public class EmergenciesAdapter extends
         RecyclerView.Adapter<EmergenciesAdapter.ViewHolder> {
+    private Context context;
+
+    public EmergenciesAdapter(Context context) {
+        this.context = context;
+    }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         // Your holder should contain a member variable
         // for any view that will be set as you render a row
+        private String mItem;
         public TextView numberId;
 
         // We also create a constructor that accepts the entire item row
@@ -29,12 +41,13 @@ public class EmergenciesAdapter extends
 
             numberId = (TextView) itemView.findViewById(R.id.numberId);
         }
+
     }
 
-    private List<Emergencie> mContacts;
+    private List<EmergencieObject> mContacts;
 
     // Pass in the contact array into the constructor
-    public EmergenciesAdapter(List<Emergencie> contacts) {
+    public EmergenciesAdapter(List<EmergencieObject> contacts) {
         mContacts = contacts;
     }
 
@@ -55,11 +68,30 @@ public class EmergenciesAdapter extends
     @Override
     public void onBindViewHolder(EmergenciesAdapter.ViewHolder viewHolder, int position) {
         // Get the data model based on position
-        Emergencie contact = mContacts.get(position);
+        final EmergencieObject contact = mContacts.get(position);
 
         // Set item views based on your views and data model
         TextView textView = viewHolder.numberId;
         textView.setText(contact.getNumeroParte());
+        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try
+                {
+                    String url = "waze://?ll="+contact.getLongitud()+","+contact.getLatitud()+"&navigate=yes";
+                    Log.d("URL", "URL: " +url + " ");
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                    v.getContext().startActivity(intent);
+                }
+                catch (ActivityNotFoundException ex)
+                {
+                    // If Waze is not installed, open it in Google Play:
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.waze"));
+                    v.getContext().startActivity(intent);
+                }
+                Log.d("CLICKEADO", "onClick " + contact.getNumeroParte() + " ");
+            }
+        });
     }
 
     // Returns the total count of items in the list

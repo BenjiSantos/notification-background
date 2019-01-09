@@ -1,6 +1,7 @@
 package supervision.qw.gob.pe.testing;
 
 import android.content.Context;
+import android.media.Image;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -32,9 +34,9 @@ public class RadioFragment extends Fragment implements OnTabNavListener, View.On
     private ProgressBar playSeekBar;
 
     private TextView tvRadioUrl;
-    private Button buttonPlay;
+    private ImageView buttonPlay;
 
-    private Button buttonStopPlay;
+    private ImageView buttonStopPlay;
 
     private MediaPlayer player;
 
@@ -56,21 +58,25 @@ public class RadioFragment extends Fragment implements OnTabNavListener, View.On
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         //ImageView imageView = (ImageView) getView().findViewById(R.id.foo);
         // or  (ImageView) view.findViewById(R.id.foo);
-        buttonPlay = (Button) getView().findViewById(R.id.buttonPlay);
+        buttonPlay = (ImageView) getView().findViewById(R.id.buttonPlay);
         buttonPlay.setOnClickListener(this);
 
-        buttonStopPlay = (Button) getView().findViewById(R.id.buttonStop);
+        buttonStopPlay = (ImageView) getView().findViewById(R.id.buttonStop);
         buttonStopPlay.setEnabled(false);
         buttonStopPlay.setOnClickListener(this);
-        tvRadioUrl = (TextView) getView().findViewById(R.id.textViewRadioUrl);
-        tvRadioUrl.setText("Radio url : "+url_radio);
+        //tvRadioUrl = (TextView) getView().findViewById(R.id.textViewRadioUrl);
+        //tvRadioUrl.setText("Radio url : "+url_radio);
     }
 
     public void onClick(View v) {
         if (v == buttonPlay) {
             startPlaying();
+            buttonPlay.setVisibility(View.GONE);
+            buttonStopPlay.setVisibility(View.VISIBLE);
         } else if (v == buttonStopPlay) {
             stopPlaying();
+            buttonStopPlay.setVisibility(View.GONE);
+            buttonPlay.setVisibility(View.VISIBLE);
         }
     }
 
@@ -100,7 +106,6 @@ public class RadioFragment extends Fragment implements OnTabNavListener, View.On
 
         buttonPlay.setEnabled(true);
         buttonStopPlay.setEnabled(false);
-
 
     }
 

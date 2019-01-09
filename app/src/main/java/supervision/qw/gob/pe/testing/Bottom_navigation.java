@@ -3,6 +3,7 @@ package supervision.qw.gob.pe.testing;
 import android.app.job.JobInfo;
 import android.app.job.JobScheduler;
 import android.content.ComponentName;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,6 +14,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -24,6 +26,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.gson.JsonObject;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.List;
 
@@ -40,6 +47,7 @@ public class Bottom_navigation extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnTabNavListener {
 
     private TextView mTextMessage;
+    private SwipeRefreshLayout swipeRefreshLayout;
     private FirefighterService EmergenciesService;
     private RecyclerView mEmergencies;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -51,24 +59,36 @@ public class Bottom_navigation extends AppCompatActivity
                 case R.id.navigation_home:
                     //mTextMessage.setText(R.string.title_home);
                     Log.d("TAG", "MENU 1");
+                    switchToFragment_emergencie();
                     return true;
                 case R.id.navigation_dashboard:
                     //mTextMessage.setText(R.string.title_dashboard);
                     Log.d("TAG", "MENU 2");
-                    switchToFragment1();
+                    switchToFragment_radio();
                     return true;
                 case R.id.navigation_notifications:
                     //mTextMessage.setText(R.string.title_notifications);
                     Log.d("TAG", "MENU 3");
+                    switchToFragment_credit();
                     return true;
             }
             return false;
         }
     };
 
-    public void switchToFragment1() {
+    public void switchToFragment_emergencie() {
+        Intent intent = new Intent(this, Bottom_navigation.class);
+        startActivity(intent);
+    }
+
+    public void switchToFragment_radio() {
         FragmentManager manager = getSupportFragmentManager();
         manager.beginTransaction().replace(R.id.drawer_layout, new RadioFragment()).commit();
+    }
+
+    public void switchToFragment_credit() {
+        FragmentManager manager = getSupportFragmentManager();
+        manager.beginTransaction().replace(R.id.drawer_layout, new CreditFragment()).commit();
     }
 
     @Override
@@ -83,7 +103,6 @@ public class Bottom_navigation extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -95,6 +114,18 @@ public class Bottom_navigation extends AppCompatActivity
 
         EmergenciesService = RetrofitClient.getRetrofit().create(FirefighterService.class);
         mEmergencies = (RecyclerView) findViewById(R.id.emergenciesRecyclerView);
+
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
+        swipeRefreshLayout.setColorSchemeResources(R.color.colorWhite);
+        swipeRefreshLayout.setProgressBackgroundColorSchemeResource(R.color.colorPrimary);
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // Esto se ejecuta cada vez que se realiza el gesto
+                syncEmergencies();
+            }
+        });
 
         syncEmergencies();
         scheduleJob();
@@ -149,10 +180,10 @@ public class Bottom_navigation extends AppCompatActivity
     }
 
     private void syncEmergencies() {
-        Call<List<Emergencie>> loginCall = EmergenciesService.getEmergencies();
-        loginCall.enqueue(new Callback<List<Emergencie>>() {
+        Call<Emergencie> loginCall = EmergenciesService.getEmergencies();
+        loginCall.enqueue(new Callback<Emergencie>() {
             @Override
-            public void onResponse(Call<List<Emergencie>> call, Response<List<Emergencie>> response) {
+            public void onResponse(Call<Emergencie> call, Response<Emergencie> response) {
 
                 if (!response.isSuccessful()) {
                     Toast.makeText(Bottom_navigation.this, "No se sincronizaron emergencias: 1", Toast.LENGTH_LONG).show();
@@ -169,22 +200,28 @@ public class Bottom_navigation extends AppCompatActivity
                 else {
                     // Initialize contacts
                     // Create adapter passing in the sample user data
-                    EmergenciesAdapter adapter = new EmergenciesAdapter(response.body());
+                    EmergenciesAdapter adapter = new EmergenciesAdapter(response.body().getEmergenciesTotal());
+
                     // Attach the adapter to the recyclerview to populate items
                     mEmergencies.setAdapter(adapter);
+
                     // Set layout manager to position the items
                     mEmergencies.setLayoutManager(new LinearLayoutManager(Bottom_navigation.this));
+
                     SharedPreferences sharedPref = getSharedPreferences("EmergenciesShared", MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPref.edit();
-                    editor.putString("NumeroParte", response.body().get(0).getNumeroParte());
+                    editor.putString("NumeroParte", response.body().getEmergenciesTotal().get(0).getNumeroParte());
                     editor.commit();
-                    Toast.makeText(Bottom_navigation.this,  response.body().get(0).getNumeroParte(), Toast.LENGTH_LONG).show();
-                }
+
+                    swipeRefreshLayout.setRefreshing(false);
+
+                    }
             }
 
             @Override
-            public void onFailure(Call<List<Emergencie>> call, Throwable t) {
-                Toast.makeText(Bottom_navigation.this, "No se sincronizaron emergencias: " + " (" + t.getMessage() + ")", Toast.LENGTH_LONG).show();
+            public void onFailure(Call<Emergencie> call, Throwable t) {
+                Log.d("ERROR: " , ""+ t.getMessage());
+                Toast.makeText(Bottom_navigation.this, "No se sincronizaron emergencias: 4" + " (" + t.getMessage() + ")", Toast.LENGTH_LONG).show();
             }
         });
     }

@@ -11,8 +11,8 @@ import supervision.qw.gob.pe.testing.api.model.Emergencie;
 
 public interface FirefighterService {
 
-    @GET("GetEmergencies/")
-    Call<List<Emergencie>> getEmergencies();
+    @GET("getemergencieslastest")
+    Call<Emergencie> getEmergencies();
 
 }
 
