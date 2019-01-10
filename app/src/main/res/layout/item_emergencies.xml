@@ -12,34 +12,65 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="@dimen/padd_card"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:background="@drawable/rounded_edge">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1">
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="Large Text"
+                    android:text="Incidencia"
                     android:gravity="left"
                     android:textSize="@dimen/text_card"
                     android:textColor="@color/colorWhite"
                     android:layout_margin="5dp"
+                    android:layout_weight="1"
                     android:id="@+id/numberId" />
-
+                <Button
+                    android:id="@+id/button1"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:gravity="right"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/ubicacion"
+                    />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:paddingRight="4dp"
+                    android:src="@drawable/calendar"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorWhite"
+                    android:text="09/01/2019"
+                    />
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:paddingRight="4dp"
+                    android:src="@drawable/hora"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorWhite"
+                    android:layout_weight="2"
+                    android:text="Hace 5 min"
+                    />
             </LinearLayout>
 
-            <Button
-                android:id="@+id/button1"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:gravity="center_vertical"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/logo"
-                />
+
         </LinearLayout>
 
     </RelativeLayout>
