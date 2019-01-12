@@ -22,7 +22,7 @@ public class NewMessageNotification {
         final Resources res = context.getResources();
 
         //@TODO Add true image firefighters
-        final Bitmap picture = BitmapFactory.decodeResource(res, R.drawable.example_picture);
+        final Bitmap picture = BitmapFactory.decodeResource(res, R.drawable.logo);
 
 
         final String ticker = exampleString;
