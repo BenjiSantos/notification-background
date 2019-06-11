@@ -104,8 +104,7 @@ public class NotificationJobService extends JobService {
                 Log.d("numerodeparte",  PartNumber);
                 Log.d("lastEmergencie",  lastPartNumber);
 
-                //PartNumber.compareTo(lastPartNumber)
-                if(1 != 0) {
+                if(PartNumber.compareTo(lastPartNumber)!= 0) {
                     //@TODO define all text for notification
                     message.notify(getApplicationContext(), typeEmergencie, PartNumber, 1, dateEmergencie, addressEmergencie, stateNotification, CHANNEL_ID );
                 }
