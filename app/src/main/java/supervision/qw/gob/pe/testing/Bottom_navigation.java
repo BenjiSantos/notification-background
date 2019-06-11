@@ -8,9 +8,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -23,16 +21,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.google.gson.JsonObject;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -42,6 +32,8 @@ import supervision.qw.gob.pe.testing.api.FirefighterService;
 import supervision.qw.gob.pe.testing.api.RetrofitClient;
 import supervision.qw.gob.pe.testing.api.model.Emergencie;
 import supervision.qw.gob.pe.testing.listeners.OnTabNavListener;
+import supervision.qw.gob.pe.testing.service.NewMessageNotification;
+import supervision.qw.gob.pe.testing.service.NotificationJobService;
 
 public class Bottom_navigation extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnTabNavListener {
@@ -227,7 +219,7 @@ public class Bottom_navigation extends AppCompatActivity
     }
 
     public void scheduleJob() {
-        ComponentName componentName = new ComponentName(this, ExampleJobService.class);
+        ComponentName componentName = new ComponentName(this, NotificationJobService.class);
         JobInfo info = new JobInfo.Builder(123, componentName)
                 .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
                 .setPersisted(true)

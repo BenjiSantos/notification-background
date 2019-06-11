@@ -6,5 +6,5 @@
     <dimen name="nav_header_height">176dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="padd_card">10dp</dimen>
-    <dimen name="text_card">14dp</dimen>
+    <dimen name="text_card">16dp</dimen>
 </resources>

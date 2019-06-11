@@ -1,4 +1,4 @@
-package supervision.qw.gob.pe.testing;
+package supervision.qw.gob.pe.testing.service;
 
 import android.annotation.TargetApi;
 import android.app.Notification;
@@ -14,22 +14,25 @@ import android.net.Uri;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 
+import supervision.qw.gob.pe.testing.Bottom_navigation;
+import supervision.qw.gob.pe.testing.MainActivity;
+import supervision.qw.gob.pe.testing.R;
+
 public class NewMessageNotification {
     private static final String NOTIFICATION_TAG = "NewMessage";
 
-    public static void notify(final Context context,
-                              final String exampleString, final int number, final String channelId) {
+    public static void notify(final Context context, final String titleNotification,
+                              final String partNumberNotification, final int number, final String dateEmergencie, final String addressNotification,
+                              final String stateNotification, final String channelId) {
         final Resources res = context.getResources();
 
         //@TODO Add true image firefighters
         final Bitmap picture = BitmapFactory.decodeResource(res, R.drawable.logo);
 
 
-        final String ticker = exampleString;
-        final String title = res.getString(
-                R.string.new_message_notification_title_template, exampleString);
-        final String text = res.getString(
-                R.string.new_message_notification_placeholder_text_template, exampleString);
+        final String title = titleNotification;
+        final String ticker = "Notificación Bomberos Perú";
+        final String text = "N° Parte: " + partNumberNotification + " - " + addressNotification + " - " + stateNotification;
 
         final NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channelId)
                 .setDefaults(Notification.DEFAULT_ALL)
@@ -50,7 +53,7 @@ public class NewMessageNotification {
                 // Set the pending intent to be initiated when the user touches
                 // the notification.
                 .setContentIntent(
-                        PendingIntent.getActivity(context, 0,  new Intent(context, MainActivity.class), 0))
+                        PendingIntent.getActivity(context, 0,  new Intent(context, Bottom_navigation.class), 0))
 
                 // Show expanded text content on devices running Android 4.1 or
                 // later.
@@ -58,7 +61,7 @@ public class NewMessageNotification {
                 .setStyle(new NotificationCompat.BigTextStyle()
                         .bigText(text)
                         .setBigContentTitle(title)
-                        .setSummaryText("Dummy summary text"))
+                        .setSummaryText(dateEmergencie))
 
                 // Automatically dismiss the notification when it is touched.
                 .setAutoCancel(true);

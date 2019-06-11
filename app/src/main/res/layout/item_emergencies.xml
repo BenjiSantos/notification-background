@@ -30,7 +30,8 @@
                     android:textColor="@color/colorWhite"
                     android:layout_margin="5dp"
                     android:layout_weight="1"
-                    android:id="@+id/numberId" />
+                    android:textStyle="bold"
+                    android:id="@+id/typeEmergencieId" />
                 <Button
                     android:id="@+id/button1"
                     android:layout_width="80dp"
@@ -52,6 +53,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_weight="1"
+                    android:id="@+id/dateEmergencie"
                     android:layout_height="wrap_content"
                     android:textColor="@color/colorWhite"
                     android:text="09/01/2019"

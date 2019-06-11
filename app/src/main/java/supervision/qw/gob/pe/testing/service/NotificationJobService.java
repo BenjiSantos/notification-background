@@ -1,4 +1,4 @@
-package supervision.qw.gob.pe.testing;
+package supervision.qw.gob.pe.testing.service;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -6,12 +6,8 @@ import android.app.job.JobParameters;
 import android.app.job.JobService;
 import android.content.SharedPreferences;
 import android.os.Build;
-import android.preference.PreferenceManager;
 import android.support.annotation.RequiresApi;
 import android.util.Log;
-import android.widget.Toast;
-
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -20,8 +16,8 @@ import supervision.qw.gob.pe.testing.api.FirefighterService;
 import supervision.qw.gob.pe.testing.api.RetrofitClient;
 import supervision.qw.gob.pe.testing.api.model.Emergencie;
 
-public class ExampleJobService extends JobService {
-    private static final String TAG = "ExampleJobService";
+public class NotificationJobService extends JobService {
+    private static final String TAG = "NotificationJobService";
     private FirefighterService EmergenciesService;
     private static final String CHANNEL_ID = "default";
     private static final String CHANNEL_DESCRIPTION = "Your description...";
@@ -68,6 +64,11 @@ public class ExampleJobService extends JobService {
                     SharedPreferences sharedPref = getSharedPreferences("EmergenciesShared", MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPref.edit();
                     editor.putString("lastPartNumberEmergencie", response.body().getEmergenciesTotal().get(0).getNumeroParte());
+                    editor.putString("typeEmergencie", response.body().getEmergenciesTotal().get(0).getTipoEmergenciaCompleto());
+                    editor.putString("dateEmergencie", response.body().getEmergenciesTotal().get(0).getFechaParte());
+                    editor.putString("addressEmergencie", response.body().getEmergenciesTotal().get(0).getDireccion() +
+                            response.body().getEmergenciesTotal().get(0).getDistrito());
+                    editor.putString("stateNotification", response.body().getEmergenciesTotal().get(0).getEstadoRegistro());
                     editor.commit();
                 }
             }
@@ -95,13 +96,18 @@ public class ExampleJobService extends JobService {
                 SharedPreferences preferences = getSharedPreferences("EmergenciesShared", MODE_PRIVATE);
                 String PartNumber =  preferences.getString("NumeroParte", "-");
                 String lastPartNumber = preferences.getString("lastPartNumberEmergencie", "--");
+                String dateEmergencie = preferences.getString("dateEmergencie", "---");
+                String typeEmergencie = preferences.getString("typeEmergencie", "----");
+                String addressEmergencie = preferences.getString("addressEmergencie", "-----");
+                String stateNotification = preferences.getString("stateNotification", "------");
 
                 Log.d("numerodeparte",  PartNumber);
                 Log.d("lastEmergencie",  lastPartNumber);
 
-                if(PartNumber.compareTo(lastPartNumber) != 0) {
+                //PartNumber.compareTo(lastPartNumber)
+                if(1 != 0) {
                     //@TODO define all text for notification
-                    message.notify(getApplicationContext(), "" + PartNumber, 1, CHANNEL_ID );
+                    message.notify(getApplicationContext(), typeEmergencie, PartNumber, 1, dateEmergencie, addressEmergencie, stateNotification, CHANNEL_ID );
                 }
 
                 if (jobCancelled) {

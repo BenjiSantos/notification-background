@@ -30,7 +30,8 @@ public class EmergenciesAdapter extends
         // Your holder should contain a member variable
         // for any view that will be set as you render a row
         private String mItem;
-        public TextView numberId;
+        public TextView typeEmergencieId;
+        public TextView dateEmergencie;
 
         // We also create a constructor that accepts the entire item row
         // and does the view lookups to find each subview
@@ -39,7 +40,8 @@ public class EmergenciesAdapter extends
             // to access the context from any ViewHolder instance.
             super(itemView);
 
-            numberId = (TextView) itemView.findViewById(R.id.numberId);
+            typeEmergencieId = (TextView) itemView.findViewById(R.id.typeEmergencieId);
+            dateEmergencie = (TextView) itemView.findViewById(R.id.dateEmergencie);
         }
 
     }
@@ -71,8 +73,14 @@ public class EmergenciesAdapter extends
         final EmergencieObject contact = mContacts.get(position);
 
         // Set item views based on your views and data model
-        TextView textView = viewHolder.numberId;
-        textView.setText(contact.getNumeroParte());
+        TextView typeEmergencieView = viewHolder.typeEmergencieId;
+        typeEmergencieView.setText(contact.getTipoEmergencia());
+
+        TextView dateEmergencieView = viewHolder.dateEmergencie;
+        dateEmergencieView.setText(contact.getFechaParte());
+
+
+
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
